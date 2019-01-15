@@ -37,6 +37,9 @@ class AddContact extends Component {
       phone,
       errors: {}
     };
+
+    this.props.history.push("/");
+
     dispatch({ type: "ADD_CONTACT", payload: newContact });
     //clear input fields after added user
     this.setState({
