@@ -16,6 +16,16 @@ const reducer = (state, action) => {
         ...state,
         contacts: [action.payload, ...state.contacts]
       };
+    case "UPDATE_CONTACT":
+      return {
+        ...state,
+        //used ternary operator ? : to check condition. id in payload comes form API JSON, where is automatically added to user, that why we have id from res.data in EditContact.js
+        contacts: state.contacts.map(contact =>
+          contact.id === action.payload.id
+            ? (contact = action.payload)
+            : contact
+        )
+      };
     default:
       return state;
   }
@@ -26,11 +36,11 @@ export class Provider extends Component {
     contacts: [],
     dispatch: action => this.setState(state => reducer(state, action))
   };
+  // async/ await method of doing
+  async componentDidMount() {
+    const res = await axios.get("https://jsonplaceholder.typicode.com/users");
 
-  componentDidMount() {
-    axios
-      .get("https://jsonplaceholder.typicode.com/users")
-      .then(res => this.setState({ contacts: res.data }));
+    this.setState({ contacts: res.data });
   }
   render() {
     return (
